@@ -9,8 +9,40 @@
     tools:context=".MainActivityFragment">
 
     <LinearLayout
+        android:id="@+id/sort_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="3dp">
+
+        <TextView
+            android:id="@+id/sort_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="Sort by PRICE" />
+
+        <TextView
+            android:id="@+id/sort_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="Sort by WEIGHT" />
+
+        <TextView
+            android:id="@+id/sort_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="Sort by NAME" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sort_layout"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <ListView

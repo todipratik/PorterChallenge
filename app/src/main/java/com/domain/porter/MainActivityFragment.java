@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,15 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Parcel>>, AdapterView.OnItemClickListener {
+public class MainActivityFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Parcel>>, AdapterView.OnItemClickListener, View.OnClickListener {
 
     private static final String URL_API_HITS = "https://porter.0x10.info/api/parcel?type=json&query=api_hits";
 
@@ -36,6 +39,10 @@ public class MainActivityFragment extends ListFragment implements LoaderManager.
     private ArrayList<Parcel> mParcels;
     private ImageLoader mImageLoader;
     private ListView mListView;
+
+    private TextView mSortPrice;
+    private TextView mSortWeight;
+    private TextView mSortName;
 
     private TextView mTotalHits;
     private TextView mTotalParcels;
@@ -50,6 +57,9 @@ public class MainActivityFragment extends ListFragment implements LoaderManager.
         mListView = (ListView) view.findViewById(android.R.id.list);
         mTotalHits = (TextView) view.findViewById(R.id.api_hits);
         mTotalParcels = (TextView) view.findViewById(R.id.total_parcels);
+        mSortPrice = (TextView) view.findViewById(R.id.sort_price);
+        mSortWeight = (TextView) view.findViewById(R.id.sort_weight);
+        mSortName = (TextView) view.findViewById(R.id.sort_name);
         return view;
     }
 
@@ -73,6 +83,10 @@ public class MainActivityFragment extends ListFragment implements LoaderManager.
         mImageLoader.init(config);
         mParcelAdapter = new ParcelAdapter(getActivity(), mParcels, mImageLoader);
         setListAdapter(mParcelAdapter);
+
+        mSortPrice.setOnClickListener(this);
+        mSortWeight.setOnClickListener(this);
+        mSortName.setOnClickListener(this);
 
         new ApiHit().execute(URL_API_HITS);
         getLoaderManager().initLoader(0, null, this).forceLoad();
@@ -102,6 +116,51 @@ public class MainActivityFragment extends ListFragment implements LoaderManager.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.sort_price:
+                Collections.sort(mParcels, new Comparator<Parcel>() {
+                    @Override
+                    public int compare(Parcel lhs, Parcel rhs) {
+                        String left = lhs.getPrice();
+                        left = left.replaceAll(",", "");
+                        String right = rhs.getPrice();
+                        right = right.replaceAll(",", "");
+                        Long l = Long.parseLong(left);
+                        Long r = Long.parseLong(right);
+                        return l.compareTo(r);
+                    }
+                });
+                mParcelAdapter.notifyDataSetChanged();
+                break;
+            case R.id.sort_weight:
+                Collections.sort(mParcels, new Comparator<Parcel>() {
+                    @Override
+                    public int compare(Parcel lhs, Parcel rhs) {
+                        String left = lhs.getWeight();
+                        String right = rhs.getWeight();
+                        left = left.replace("kg", "");
+                        right = right.replace("kg", "");
+                        Double l = Double.parseDouble(left);
+                        Double r = Double.parseDouble(right);
+                        return l.compareTo(r);
+                    }
+                });
+                mParcelAdapter.notifyDataSetChanged();
+                break;
+            case R.id.sort_name:
+                Collections.sort(mParcels, new Comparator<Parcel>() {
+                    @Override
+                    public int compare(Parcel lhs, Parcel rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
+                mParcelAdapter.notifyDataSetChanged();
+                break;
+        }
     }
 
     class ApiHit extends AsyncTask<String, Void, Integer> {
