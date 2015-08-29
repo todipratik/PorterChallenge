@@ -24,12 +24,22 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/phone"
-        android:layout_width="100dp"
-        android:layout_height="20dp"
+        android:id="@+id/phone_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@id/name"
         android:layout_below="@id/name"
         android:layout_marginLeft="5dp"
+        android:padding="1dp"
+        android:text="Phone:" />
+
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@id/phone_text"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/phone_text"
         android:padding="1dp" />
 
     <TextView
@@ -40,7 +50,7 @@
         android:layout_below="@id/phone"
         android:layout_marginLeft="5dp"
         android:padding="1dp"
-        android:text="ETA" />
+        android:text="ETA:" />
 
     <TextView
         android:id="@+id/date"
@@ -50,5 +60,36 @@
         android:layout_marginLeft="2dp"
         android:layout_toRightOf="@id/date_text"
         android:padding="1dp" />
+
+    <TextView
+        android:id="@+id/weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/name"
+        android:layout_below="@id/date"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="6dp"
+        android:padding="1dp" />
+
+    <TextView
+        android:id="@+id/color"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignBottom="@id/weight"
+        android:layout_alignTop="@id/weight"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/weight"
+        android:padding="1dp" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/image"
+        android:layout_marginLeft="6dp"
+        android:layout_toRightOf="@id/image"
+        android:padding="1dp"
+        android:textSize="17sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

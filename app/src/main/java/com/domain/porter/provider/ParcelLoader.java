@@ -22,6 +22,6 @@ public class ParcelLoader extends AsyncTaskLoader<List<Parcel>> {
     @Override
     public List<Parcel> loadInBackground() {
         JSONParser jsonParser = new JSONParser();
-        return jsonParser.getJSONFromUrl(URL);
+        return jsonParser.getParcels(URL);
     }
 }

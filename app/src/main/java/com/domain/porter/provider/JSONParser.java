@@ -46,6 +46,7 @@ public class JSONParser {
     public static final String KEY_LOCATION = "live_location";
     public static final String KEY_LONGITUDE = "latitude";
     public static final String KEY_LATITUDE = "longitude";
+    public static final String KEY_API_HITS = "api_hits";
 
 
     static InputStream inputStream = null;
@@ -53,8 +54,7 @@ public class JSONParser {
     static String json = "";
 
 
-    public List<Parcel> getJSONFromUrl(String source_url) {
-
+    protected JSONObject getJSONFromUrl(String source_url) {
         try {
             // Create a trust manager that does not validate certificate chains
             TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
@@ -105,13 +105,29 @@ public class JSONParser {
             e.printStackTrace();
         }
 
+        JSONObject object = null;
         // try to parse the string to a JSON object
         try {
-            jsonObject = new JSONObject(json);
+            object = new JSONObject(json);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
+        return object;
+    }
 
+    public Integer getApiHits(String source_url) {
+        JSONObject object = getJSONFromUrl(source_url);
+        Integer hits = 0;
+        try {
+            hits = object.getInt(KEY_API_HITS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hits;
+    }
+
+    public List<Parcel> getParcels(String source_url) {
+        jsonObject = getJSONFromUrl(source_url);
         JSONArray jsonArray = null;
         List<Parcel> parcelList = new ArrayList<>();
         if (jsonObject != null) {
