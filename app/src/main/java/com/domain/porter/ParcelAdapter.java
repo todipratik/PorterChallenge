@@ -5,14 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.domain.porter.model.Parcel;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by pratik on 29/8/15.
@@ -21,22 +23,25 @@ public class ParcelAdapter extends ArrayAdapter<Parcel> {
 
     private ArrayList<Parcel> mParcels;
     private Context mContext;
+    private ImageLoader mImageLoader;
 
     static class ViewHolder {
         public TextView name;
         public TextView phone;
         public TextView date;
+        public ImageView image;
     }
 
-    public ParcelAdapter(Context context, ArrayList<Parcel> parcels) {
+    public ParcelAdapter(Context context, ArrayList<Parcel> parcels, ImageLoader imageLoader) {
         super(context, R.layout.list_parcel_item, parcels);
         mContext = context;
         mParcels = parcels;
+        mImageLoader = imageLoader;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view =  convertView;
+        View view = convertView;
         if (view == null) {
             ViewHolder viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -44,6 +49,7 @@ public class ParcelAdapter extends ArrayAdapter<Parcel> {
             viewHolder.name = (TextView) view.findViewById(R.id.name);
             viewHolder.phone = (TextView) view.findViewById(R.id.phone);
             viewHolder.date = (TextView) view.findViewById(R.id.date);
+            viewHolder.image = (ImageView) view.findViewById(R.id.image);
             view.setTag(viewHolder);
         }
         ViewHolder holder = (ViewHolder) view.getTag();
@@ -51,6 +57,7 @@ public class ParcelAdapter extends ArrayAdapter<Parcel> {
         holder.name.setText(parcel.getName());
         holder.phone.setText(parcel.getPhone());
         holder.date.setText(getDateFromEpoch(parcel.getDate()));
+        mImageLoader.displayImage(parcel.getImageUrl(), holder.image);
         return view;
     }
 
